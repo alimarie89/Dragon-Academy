@@ -283,10 +283,9 @@ function switchTab(id, btn) {
   }
 
   function toggleAccordion(header) {
-    const body = header.nextElementSibling;
-    const isOpen = header.classList.contains('open');
-    header.classList.toggle('open', !isOpen);
-    body.classList.toggle('open', !isOpen);
+    const group = header.parentElement;
+    const isOpen = group.classList.contains('open');
+    group.classList.toggle('open', !isOpen);
   }
 
   function switchDepth(btn, panelId) {
