@@ -7,6 +7,67 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<script src="practices-data.js"></script>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+
+<!-- Modal & Auth Styles -->
+<style>
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+  }
+  
+  .modal-content {
+    position: relative;
+    z-index: 1001;
+    animation: slideInUp 0.3s ease-out;
+  }
+  
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  #member-info {
+    display: none;
+  }
+  
+  #member-info.active {
+    display: flex;
+  }
+  
+  .admin-tab-btn.active {
+    color: var(--ember) !important;
+    border-bottom: 2px solid var(--ember) !important;
+  }
+</style>
 
 </head>
 <body>
@@ -17,6 +78,17 @@
     <span class="forge-mark">🔥</span>
     <h1 class="site-title">Dragon Academy</h1>
     <p class="site-subtitle">Knowledge Map — Winter 2026</p>
+    
+    <!-- Auth UI -->
+    <div id="auth-button" style="position: absolute; top: 24px; right: 24px; cursor: pointer;">
+      <button onclick="signInWithGoogle()" style="background: var(--ember); color: white; border: none; padding: 10px 24px; border-radius: 3px; font-family: 'Cinzel', serif; font-size: 14px; font-weight: 600; cursor: pointer;">Sign In</button>
+    </div>
+    
+    <div id="member-info" style="position: absolute; top: 24px; right: 24px; display: none; align-items: center; gap: 12px;">
+      <span id="member-name" style="color: var(--white); font-weight: 600;"></span>
+      <button onclick="openModal('member-modal')" style="background: var(--ember); color: white; border: none; padding: 10px 24px; border-radius: 3px; font-family: 'Cinzel', serif; font-size: 14px; font-weight: 600; cursor: pointer;">Profile</button>
+      <button id="admin-button" style="background: var(--stone); color: white; border: none; padding: 10px 24px; border-radius: 3px; font-family: 'Cinzel', serif; font-size: 14px; font-weight: 600; cursor: pointer; display: none;" onclick="openAdminPanel()">Admin Panel</button>
+    </div>
   </header>
 
   <!-- TAB BAR -->
@@ -24,6 +96,7 @@
     <button class="tab active" onclick="switchTab('overview', this)">The Forge</button>
     <button class="tab" onclick="switchTab('concepts', this)">Core Concepts</button>
     <button class="tab" onclick="switchTab('arc', this)">Session Arc</button>
+    <button class="tab" onclick="switchTab('library', this)">Practices Library</button>
     <button class="tab" onclick="switchTab('practices', this)">Practices</button>
     <button class="tab" onclick="switchTab('power', this)">Power</button>
   </div>
@@ -622,7 +695,15 @@
         <div class="timeline-session">Session 1 · Jan 13</div>
         <div class="timeline-title">Instinct <span class="badge badge-done">Done</span></div>
         <div class="timeline-note">Authority returned to the body. We opened the question: <em>why do you move toward some things and away from others?</em> Instinct is the body's first movement before thought, story, or choice. When instinct is offline, patterns run unconsciously. When it's awake, movement becomes visible and choice becomes possible. We worked with the five instinctive currents: <strong>hunger, aggression, protection, eros,</strong> and <strong>sensation/directionality</strong>.</div>
-        <div class="timeline-note" style="margin-top:8px;"><strong>Practices:</strong> Sensation Practice (internal → amplified → relational); Hunger embodiment dyad ("How do I want to consume you?"); Aggression embodiment; Protection embodiment; Eros embodiment. <em>Key distinction:</em> Aggression spends energy to create change. Protection conserves energy to preserve integrity. Neither is wrong — dragon training is feeling which is actually online.</div>
+        <div class="timeline-note" style="margin-top:8px;">
+          <strong>Practices:</strong>
+          <ul style="margin: 8px 0; padding-left: 20px;">
+            <li><a href="#" onclick="switchToPractice('S1-1')" style="color: var(--ember); text-decoration: none;">Sensation Scan</a> (internal → amplified → relational)</li>
+            <li><a href="#" onclick="switchToPractice('S1-3')" style="color: var(--ember); text-decoration: none;">How Do I Want to Consume You?</a></li>
+            <li><a href="#" onclick="switchToPractice('S1-2')" style="color: var(--ember); text-decoration: none;">Instinctive Currents</a> (aggression, protection, eros)</li>
+          </ul>
+          <em>Key distinction:</em> Aggression spends energy to create change. Protection conserves energy to preserve integrity. Neither is wrong — dragon training is feeling which is actually online.
+        </div>
       </div>
 
       <div class="timeline-item">
@@ -630,7 +711,16 @@
         <div class="timeline-session">Session 2 · Jan 21</div>
         <div class="timeline-title">Truth-Telling & Box of Self <span class="badge badge-done">Done</span></div>
         <div class="timeline-note">Instinct stopped being abstract and became visible as pattern. The Box of Self is the familiar shape instinct learns to take to stay connected. Truth-Telling is what lets you see the box — it names what is actually happening before it gets shaped by habit, performance, or strategy. The box isn't a problem; it's a groove. Once visible, it becomes a playground.</div>
-        <div class="timeline-note" style="margin-top:8px;"><strong>Layers of contact practiced:</strong> (1) State Truth / Reverse Interplay — condition of my system; (2) Relational Orientation / Lean — toward, away, neutral; (3) Box of Self Truth — light and shadow; (4) Spicy Relational Truth — what you'd never normally say. <em>Key distinction:</em> Truth-Telling ≠ confession (seeks relief) ≠ processing (seeks understanding) ≠ emotional unloading (seeks discharge). Truth-Telling seeks orientation.</div>
+        <div class="timeline-note" style="margin-top:8px;">
+          <strong>Layers of contact practiced:</strong>
+          <ol style="margin: 8px 0; padding-left: 20px;">
+            <li><a href="#" onclick="switchToPractice('S2-1')" style="color: var(--ember); text-decoration: none;">State Truth</a> / <a href="#" onclick="switchToPractice('S2-1')" style="color: var(--ember); text-decoration: none;">Reverse Interplay</a> — condition of my system</li>
+            <li><a href="#" onclick="switchToPractice('S2-2')" style="color: var(--ember); text-decoration: none;">Naming Your Lean</a> — toward, away, neutral</li>
+            <li><a href="#" onclick="switchToPractice('S2-3')" style="color: var(--ember); text-decoration: none;">Box of Self Reveals</a> — light and shadow</li>
+            <li><a href="#" onclick="switchToPractice('S2-4')" style="color: var(--ember); text-decoration: none;">Spicy Relational Truth</a> — what you'd never normally say</li>
+          </ol>
+          <em>Key distinction:</em> Truth-Telling ≠ confession (seeks relief) ≠ processing (seeks understanding) ≠ emotional unloading (seeks discharge). Truth-Telling seeks orientation.
+        </div>
       </div>
 
       <div class="timeline-item">
@@ -638,7 +728,22 @@
         <div class="timeline-session">Session 3 · Jan 28</div>
         <div class="timeline-title">Interplay & Contact <span class="badge badge-done">Done</span></div>
         <div class="timeline-note">Interplay is a dance of attention — a fast-paced, real-time relational practice that trains where your attention moves under pressure, and how much choice you have as it moves. Contact is the nervous-system experience of mutual presence: <em>we are both here, neither of us is leaving, nothing has to be fixed.</em> When contact is online, silence is tolerable, misunderstanding isn't threatening, disagreement doesn't destabilize the bond.</div>
-        <div class="timeline-note" style="margin-top:8px;"><strong>Practices:</strong> Watermelon (show, don't tell); Resting in the Repetition (trust what wants to emerge); You're here/You left (naming contact drops); Interplay with Demands. <em>The four capacities Interplay builds:</em> posture of attention (out, self intact); regulation through contact not explanation; choice under relational pressure; pattern revelation without story.</div>
+        <div class="timeline-note" style="margin-top:8px;">
+          <strong>Practices:</strong>
+          <ul style="margin: 8px 0; padding-left: 20px;">
+            <li><a href="#" onclick="switchToPractice('S3-1')" style="color: var(--ember); text-decoration: none;">Watermelon</a> (show, don't tell)</li>
+            <li><a href="#" onclick="switchToPractice('S3-2')" style="color: var(--ember); text-decoration: none;">Resting in the Repetition</a> (trust what wants to emerge)</li>
+            <li><a href="#" onclick="switchToPractice('S3-3')" style="color: var(--ember); text-decoration: none;">Core Interplay</a> (naming contact drops)</li>
+            <li><a href="#" onclick="switchToPractice('S3-5')" style="color: var(--ember); text-decoration: none;">Demands in Interplay</a></li>
+          </ul>
+          <em>The four capacities Interplay builds:</em>
+          <ul style="margin: 8px 0; padding-left: 20px;">
+            <li>posture of attention (out, self intact)</li>
+            <li>regulation through contact not explanation</li>
+            <li>choice under relational pressure</li>
+            <li>pattern revelation without story</li>
+          </ul>
+        </div>
       </div>
 
       <div class="timeline-item">
@@ -646,7 +751,14 @@
         <div class="timeline-session">Session 4 · Feb 4</div>
         <div class="timeline-title">Building Shared Spine <span class="badge badge-done">Done</span></div>
         <div class="timeline-note">Authorship, Authority, and Authenticity share the same root: to originate. <em>You are already the author.</em> Reality is being written through your perceptions, choices, silences, agreements, refusals — whether you claim that or not. A shared spine is the collective capacity to stay upright together when something real is named. It exists when no single person is left carrying the full weight of truth, charge, or consequence alone.</div>
-        <div class="timeline-note" style="margin-top:8px;"><strong>Practices:</strong> Morality Interplay — transforming "that's wrong" into "you think that's wrong?" so the fence becomes visible as subjective rather than universal; Breakout small groups (Dragon Nests). <em>Integration frame:</em> Morality (external/objective: "this is wrong") vs. Integrity (internal/subjective: "this violates my values"). Consent violations often trace to people not knowing their internal integrity clearly — they haven't built their own fences.</div>
+        <div class="timeline-note" style="margin-top:8px;">
+          <strong>Practices:</strong>
+          <ul style="margin: 8px 0; padding-left: 20px;">
+            <li><a href="#" onclick="switchToPractice('S3-3')" style="color: var(--ember); text-decoration: none;">Core Interplay</a> — transforming "that's wrong" into "you think that's wrong?" so the fence becomes visible as subjective rather than universal</li>
+            <li>Breakout small groups (Dragon Nests)</li>
+          </ul>
+          <em>Integration frame:</em> Morality (external/objective: "this is wrong") vs. Integrity (internal/subjective: "this violates my values"). Consent violations often trace to people not knowing their internal integrity clearly — they haven't built their own fences.
+        </div>
       </div>
 
       <div class="timeline-item">
@@ -654,7 +766,17 @@
         <div class="timeline-session">Session 5 · Feb 11</div>
         <div class="timeline-title">Settling Styles & Completion <span class="badge badge-done">Done</span></div>
         <div class="timeline-note">Completion is not everyone feeling good, all charge resolved, or shared meaning reached. Completion is a relationship to your own state. A system is complete when it has enough coherence to move forward without unowned load. People settle in different ways — and forcing someone to settle your way is a form of covert control.</div>
-        <div class="timeline-note" style="margin-top:8px;"><strong>The five settling styles:</strong> Relational ("I settle when we talk it through"); Somatic ("I settle when intensity moves through my body"); Functional ("I settle when I know what happens next"); Intrinsic ("I settle when given space to metabolize alone"); Cognitive ("I settle when I understand the pattern or finish what I started"). <em>Key insight:</em> Moralization is often a nervous system strategy — "should/shouldn't" language frequently disguises an unmet settling need.</div>
+        <div class="timeline-note" style="margin-top:8px;">
+          <strong>The five settling styles:</strong>
+          <ul style="margin: 8px 0; padding-left: 20px;">
+            <li>Relational ("I settle when we talk it through")</li>
+            <li>Somatic ("I settle when intensity moves through my body")</li>
+            <li>Functional ("I settle when I know what happens next")</li>
+            <li>Intrinsic ("I settle when given space to metabolize alone")</li>
+            <li>Cognitive ("I settle when I understand the pattern or finish what I started")</li>
+          </ul>
+          <em>Key insight:</em> Moralization is often a nervous system strategy — "should/shouldn't" language frequently disguises an unmet settling need.
+        </div>
       </div>
 
       <div class="timeline-item">
@@ -662,7 +784,22 @@
         <div class="timeline-session">Session 6 · Feb 18</div>
         <div class="timeline-title">Threat <span class="badge badge-done">Done</span></div>
         <div class="timeline-note">Most conflict, shutdown, urgency, perfectionism, withdrawal, or control is not random — it's protective. Instead of "why am I acting this way?" we ask: <em>what threat does this system think is happening right now?</em> Different people detect different dangers in the exact same moment. We're not trying to eliminate threat responses. We're training the capacity to notice when protection has taken the wheel.</div>
-        <div class="timeline-note" style="margin-top:8px;"><strong>Five threat altitudes:</strong> Sanctuary (abandonment/annihilation); Belonging (exile/difference); Agency (powerlessness/humiliation); Contribution (harmful impact/identity collapse); Stewardship (overload/system failure). <strong>Practices:</strong> Getting Out of the Hole (Interplay — "you left," "you're frozen," "you have a nose"); Get Under It / Reverse Interplay ("I feel scared to get it wrong"). <em>Key frame:</em> Structure is externalized safety. Without it, the most activated nervous system becomes the de facto leader of the room.</div>
+        <div class="timeline-note" style="margin-top:8px;">
+          <strong>Five threat altitudes:</strong>
+          <ul style="margin: 8px 0; padding-left: 20px;">
+            <li>Sanctuary (abandonment/annihilation)</li>
+            <li>Belonging (exile/difference)</li>
+            <li>Agency (powerlessness/humiliation)</li>
+            <li>Contribution (harmful impact/identity collapse)</li>
+            <li>Stewardship (overload/system failure)</li>
+          </ul>
+          <strong>Practices:</strong>
+          <ul style="margin: 8px 0; padding-left: 20px;">
+            <li><a href="#" onclick="switchToPractice('S3-4')" style="color: var(--ember); text-decoration: none;">Getting Out of the Hole</a> (Interplay — "you left," "you're frozen," "you have a nose")</li>
+            <li><a href="#" onclick="switchToPractice('S3-3')" style="color: var(--ember); text-decoration: none;">Core Interplay</a> ("I feel scared to get it wrong")</li>
+          </ul>
+          <em>Key frame:</em> Structure is externalized safety. Without it, the most activated nervous system becomes the de facto leader of the room.
+        </div>
       </div>
 
     </div>
@@ -703,6 +840,156 @@
       </div>
     </div>
 
+    <!-- Member Tracking Section -->
+    <div id="member-tracking-section" style="display: none; margin-top: 60px; padding: 32px; background: rgba(232,82,10,0.08); border: 1px solid rgba(232,82,10,0.3); border-radius: 8px;">
+      <h3 style="color: var(--white); margin-top: 0;">Your Session Attendance & Reflections</h3>
+      <p style="color: var(--stone);">Track your attendance, rate your mastery, and share reflections with the group.</p>
+      
+      <!-- Session 1 -->
+      <div style="margin-top: 24px; padding: 16px; background: rgba(232,82,10,0.05); border-radius: 4px; border-left: 3px solid var(--ember);">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <input type="checkbox" id="attended-S1" onchange="markAttendance('S1', this.checked, document.getElementById('notes-S1').value)">
+          <label for="attended-S1" style="color: var(--white); font-weight: 600; cursor: pointer; margin: 0;">Session 1: Instinct (Jan 13)</label>
+        </div>
+        <textarea id="notes-S1" placeholder="Your notes from this session..." style="width: 100%; min-height: 80px; padding: 12px; background: var(--ash); color: var(--white); border: 1px solid rgba(232,82,10,0.3); border-radius: 3px; font-family: 'Crimson Pro', serif; font-size: 14px; resize: vertical;" onchange="markAttendance('S1', document.getElementById('attended-S1').checked, this.value)"></textarea>
+        
+        <!-- Comments for session -->
+        <div style="margin-top: 16px;">
+          <p style="color: var(--stone); font-size: 12px; margin: 0 0 8px 0;">Questions & Reflections</p>
+          <textarea id="new-comment-S1" placeholder="Share a reflection, question, or insight..." style="width: 100%; min-height: 60px; padding: 12px; background: var(--ash); color: var(--white); border: 1px solid rgba(232,82,10,0.3); border-radius: 3px; font-family: 'Crimson Pro', serif; font-size: 14px; resize: vertical;"></textarea>
+          <button onclick="addComment('S1', document.getElementById('new-comment-S1').value)" style="margin-top: 8px; background: var(--ember); color: white; border: none; padding: 8px 16px; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 600; cursor: pointer; font-size: 12px;">Post Reflection</button>
+        </div>
+        
+        <!-- Comments display -->
+        <div id="comments-S1" style="margin-top: 16px;"></div>
+      </div>
+
+      <!-- Session 2 -->
+      <div style="margin-top: 24px; padding: 16px; background: rgba(232,82,10,0.05); border-radius: 4px; border-left: 3px solid var(--ember);">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <input type="checkbox" id="attended-S2" onchange="markAttendance('S2', this.checked, document.getElementById('notes-S2').value)">
+          <label for="attended-S2" style="color: var(--white); font-weight: 600; cursor: pointer; margin: 0;">Session 2: Truth-Telling & Box of Self (Jan 21)</label>
+        </div>
+        <textarea id="notes-S2" placeholder="Your notes from this session..." style="width: 100%; min-height: 80px; padding: 12px; background: var(--ash); color: var(--white); border: 1px solid rgba(232,82,10,0.3); border-radius: 3px; font-family: 'Crimson Pro', serif; font-size: 14px; resize: vertical;" onchange="markAttendance('S2', document.getElementById('attended-S2').checked, this.value)"></textarea>
+        
+        <div style="margin-top: 16px;">
+          <p style="color: var(--stone); font-size: 12px; margin: 0 0 8px 0;">Questions & Reflections</p>
+          <textarea id="new-comment-S2" placeholder="Share a reflection, question, or insight..." style="width: 100%; min-height: 60px; padding: 12px; background: var(--ash); color: var(--white); border: 1px solid rgba(232,82,10,0.3); border-radius: 3px; font-family: 'Crimson Pro', serif; font-size: 14px; resize: vertical;"></textarea>
+          <button onclick="addComment('S2', document.getElementById('new-comment-S2').value)" style="margin-top: 8px; background: var(--ember); color: white; border: none; padding: 8px 16px; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 600; cursor: pointer; font-size: 12px;">Post Reflection</button>
+        </div>
+        
+        <div id="comments-S2" style="margin-top: 16px;"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ===== TAB: PRACTICES LIBRARY ===== -->
+  <div id="tab-library" class="tab-content">
+
+    <div class="mission-card">
+      <p class="mission-headline">The Complete Practice Library</p>
+      <p class="mission-body">Every practice from Sessions 1–7, plus foundational practices. Filter to find exactly what you're looking for.</p>
+    </div>
+
+    <div class="library-filters-row">
+      <div class="filter-group-inline">
+        <select id="filter-session-lib" onchange="filterLibraryNew()">
+          <option value="">All Sessions</option>
+          <option value="foundational">Foundational</option>
+          <option value="1">Session 1</option>
+          <option value="2">Session 2</option>
+          <option value="3">Session 3</option>
+          <option value="4">Session 4</option>
+          <option value="5">Session 5</option>
+          <option value="6">Session 6</option>
+          <option value="7">Session 7</option>
+        </select>
+      </div>
+
+      <div class="filter-group-inline">
+        <select id="filter-format-lib" onchange="filterLibraryNew()">
+          <option value="">All Formats</option>
+          <option value="solo">Solo</option>
+          <option value="dyad">Dyad</option>
+          <option value="small-group">Small Group</option>
+          <option value="full-group">Full Group</option>
+        </select>
+      </div>
+
+      <div class="filter-group-inline">
+        <select id="filter-level-lib" onchange="filterLibraryNew()">
+          <option value="">All Levels</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+
+      <div class="filter-group-inline">
+        <select id="filter-skill-lib" onchange="filterLibraryNew()">
+          <option value="">All Skills</option>
+          <option value="presence">Presence</option>
+          <option value="attunement">Attunement</option>
+          <option value="self-location">Self-Location</option>
+          <option value="truth-telling">Truth-Telling</option>
+          <option value="expressing-desire">Expressing Desire</option>
+          <option value="receiving">Receiving</option>
+          <option value="boundaries">Boundaries</option>
+          <option value="power">Power</option>
+          <option value="contact">Contact</option>
+          <option value="shadow-work">Shadow-Work</option>
+          <option value="regulation">Regulation</option>
+          <option value="completion">Completion</option>
+          <option value="resilience-under-pressure">Resilience</option>
+          <option value="witnessing">Witnessing</option>
+        </select>
+      </div>
+
+      <div class="filter-group-inline">
+        <select id="filter-topic-lib" onchange="filterLibraryNew()">
+          <option value="">All Topics</option>
+          <option value="instinct">Instinct</option>
+          <option value="sensation">Sensation</option>
+          <option value="body">Body</option>
+          <option value="nervous-system">Nervous System</option>
+          <option value="hunger">Hunger</option>
+          <option value="aggression">Aggression</option>
+          <option value="protection">Protection</option>
+          <option value="eros">Eros</option>
+          <option value="truth">Truth</option>
+          <option value="lean">Lean</option>
+          <option value="state">State</option>
+          <option value="box-of-self">Box of Self</option>
+          <option value="shadow">Shadow</option>
+          <option value="interplay">Interplay</option>
+          <option value="contact">Contact</option>
+          <option value="freeze">Freeze</option>
+          <option value="the-hole">The Hole</option>
+          <option value="authorship">Authorship</option>
+          <option value="morality">Morality</option>
+          <option value="authority">Authority</option>
+          <option value="choice">Choice</option>
+          <option value="settling-styles">Settling Styles</option>
+          <option value="threat">Threat</option>
+          <option value="vulnerability">Vulnerability</option>
+          <option value="field">Field</option>
+          <option value="power">Power</option>
+          <option value="range">Range</option>
+          <option value="yield">Yield</option>
+          <option value="collapse">Collapse</option>
+          <option value="pressure">Pressure</option>
+        </select>
+      </div>
+
+      <button class="filter-reset-btn" onclick="resetLibraryFilters()">Reset</button>
+    </div>
+
+    <div class="practices-library" id="practices-library">
+      <!-- Practices will be populated by JavaScript -->
+    </div>
+
   </div>
 
   <!-- ===== TAB: PRACTICES ===== -->
@@ -715,7 +1002,7 @@
 
     <p class="section-label">Active practices — by type</p>
 
-    <div class="accordion-group">
+    <div class="accordion-group" id="practices-interplay">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <span class="acc-number">⬤</span>
         <span class="acc-title">Interplay Variations</span>
@@ -744,7 +1031,7 @@
       </div>
     </div>
 
-    <div class="accordion-group">
+    <div class="accordion-group" id="practices-truth-telling">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <span class="acc-number">⬤</span>
         <span class="acc-title">Truth-Telling Practices</span>
@@ -769,7 +1056,7 @@
       </div>
     </div>
 
-    <div class="accordion-group">
+    <div class="accordion-group" id="practices-self-leadership">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <span class="acc-number">⬤</span>
         <span class="acc-title">Self-Leadership Practices</span>
@@ -798,7 +1085,7 @@
       </div>
     </div>
 
-    <div class="accordion-group">
+    <div class="accordion-group" id="practices-repair-contact">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <span class="acc-number">⬤</span>
         <span class="acc-title">Repair & Contact Practices</span>
@@ -823,7 +1110,7 @@
       </div>
     </div>
 
-    <div class="accordion-group">
+    <div class="accordion-group" id="practices-hard-stop">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <span class="acc-number">⬤</span>
         <span class="acc-title">The Hard Stop</span>
@@ -1022,8 +1309,94 @@
     <p>Dragon Academy Winter 2026 · The forge doesn't end when the session does.</p>
   </footer>
 
+  <!-- ===== MODALS ===== -->
+
+  <!-- Member Modal -->
+  <div id="member-modal" class="modal" style="display: none;">
+    <div class="modal-backdrop" onclick="closeModal('member-modal')"></div>
+    <div class="modal-content" style="background: var(--night); border: 1px solid rgba(232,82,10,0.3); border-radius: 8px; padding: 32px; max-width: 400px; max-height: 80vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="color: var(--white); margin: 0; font-size: 20px;">Your Profile</h2>
+        <button onclick="closeModal('member-modal')" style="background: none; border: none; color: var(--stone); font-size: 24px; cursor: pointer; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">×</button>
+      </div>
+      
+      <div id="member-profile" style="color: var(--bone); font-size: 14px; line-height: 1.8;">
+        <!-- Profile content loaded by auth.js -->
+      </div>
+      
+      <div style="margin-top: 32px; display: flex; gap: 12px;">
+        <button onclick="signOut()" style="flex: 1; background: var(--ember); color: white; border: none; padding: 12px; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 600; cursor: pointer;">Sign Out</button>
+        <button onclick="closeModal('member-modal')" style="flex: 1; background: transparent; color: var(--stone); border: 1px solid var(--stone); padding: 12px; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 600; cursor: pointer;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Error Display -->
+  <div id="auth-error" style="display: none; position: fixed; top: 100px; right: 24px; background: var(--ember); color: white; padding: 16px 24px; border-radius: 3px; font-size: 14px; z-index: 1001; max-width: 400px; word-wrap: break-word; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></div>
+
+  <!-- Admin Modal -->
+  <div id="admin-modal" class="modal" style="display: none;">
+    <div class="modal-backdrop" onclick="closeModal('admin-modal')"></div>
+    <div class="modal-content" style="background: var(--night); border: 1px solid rgba(232,82,10,0.3); border-radius: 8px; padding: 32px; max-width: 90vw; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="color: var(--white); margin: 0; font-size: 20px;">Admin Dashboard</h2>
+        <button onclick="closeModal('admin-modal')" style="background: none; border: none; color: var(--stone); font-size: 24px; cursor: pointer; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">×</button>
+      </div>
+      
+      <!-- Admin tabs -->
+      <div style="display: flex; gap: 0; border-bottom: 2px solid var(--stone); margin-bottom: 24px;">
+        <button class="admin-tab-btn active" onclick="switchAdminTab('dashboard')" style="background: none; border: none; color: var(--ember); padding: 12px 24px; font-family: 'Cinzel', serif; font-weight: 600; cursor: pointer; border-bottom: 2px solid var(--ember); margin-bottom: -2px;">Dashboard</button>
+        <button class="admin-tab-btn" onclick="switchAdminTab('users')" style="background: none; border: none; color: var(--stone); padding: 12px 24px; font-family: 'Cinzel', serif; font-weight: 600; cursor: pointer;">Users</button>
+        <button class="admin-tab-btn" onclick="switchAdminTab('attendance')" style="background: none; border: none; color: var(--stone); padding: 12px 24px; font-family: 'Cinzel', serif; font-weight: 600; cursor: pointer;">Attendance</button>
+        <button class="admin-tab-btn" onclick="switchAdminTab('comments')" style="background: none; border: none; color: var(--stone); padding: 12px 24px; font-family: 'Cinzel', serif; font-weight: 600; cursor: pointer;">Comments</button>
+      </div>
+      
+      <!-- Dashboard tab -->
+      <div id="admin-tab-dashboard" class="admin-tab-content">
+        <div id="admin-dashboard-content">
+          Loading...
+        </div>
+      </div>
+      
+      <!-- Users tab -->
+      <div id="admin-tab-users" class="admin-tab-content" style="display: none;">
+        <div id="admin-users-table">
+          Loading...
+        </div>
+      </div>
+      
+      <!-- Attendance tab -->
+      <div id="admin-tab-attendance" class="admin-tab-content" style="display: none;">
+        <div id="admin-attendance-table">
+          Loading...
+        </div>
+      </div>
+      
+      <!-- Comments tab -->
+      <div id="admin-tab-comments" class="admin-tab-content" style="display: none;">
+        <div id="admin-comments-table">
+          Loading...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Editor Modal (inside admin modal) -->
+  <div id="user-editor-modal" class="modal" style="display: none;">
+    <div class="modal-backdrop" onclick="closeModal('user-editor-modal')"></div>
+    <div class="modal-content" style="background: var(--night); border: 1px solid rgba(232,82,10,0.3); border-radius: 8px; padding: 32px; max-width: 400px;">
+      <div id="user-editor-content">
+        Loading...
+      </div>
+    </div>
+  </div>
+
 </div>
 
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/members.js"></script>
+<script src="js/admin.js"></script>
 <script src="js/script.js"></script>
 
 </body>
