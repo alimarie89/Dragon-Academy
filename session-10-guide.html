@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 10 · Relational Charge, Flooding, Impact & Feedback · Dragon Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ember: #c8441a;
+    --gold: #c9993a;
+    --ash: #e8e0d4;
+    --char: #1a1410;
+    --warm-mid: #8c7a6a;
+    --light-ash: #f2ede6;
+    --deep-red: #7a1f0a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--char);
+    color: var(--ash);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 20px;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 80px 60px 64px;
+    background: radial-gradient(ellipse at 30% 70%, #3d1a0a 0%, var(--char) 65%);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(200,68,26,0.2);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23c8441a' fill-opacity='0.03'%3E%3Cpath d='M0 0h40v40H0V0zm40 40h40v40H40V40z'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .hero-nav {
+    position: absolute;
+    top: 32px; left: 60px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-mid);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .hero-nav span { color: rgba(140,122,106,0.4); }
+
+  .hero-session {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 7vw, 5.2rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--light-ash);
+    position: relative;
+    margin-bottom: 28px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-byline {
+    font-size: 1.1rem;
+    color: var(--warm-mid);
+    font-style: italic;
+    max-width: 540px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .hero-date {
+    position: absolute;
+    top: 32px; right: 60px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--warm-mid);
+    text-align: right;
+  }
+
+  /* ── BODY ── */
+  .body {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 48px 120px;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h2 {
+    font-size: 1.9rem;
+    font-weight: 300;
+    color: var(--light-ash);
+    margin-bottom: 22px;
+    line-height: 1.2;
+  }
+  h2 em { font-style: italic; color: var(--gold); }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ash);
+    margin: 32px 0 12px;
+    letter-spacing: 0.01em;
+  }
+
+  h4 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--ash);
+    margin: 24px 0 8px;
+    letter-spacing: 0.01em;
+  }
+
+  p {
+    margin: 16px 0;
+    color: var(--ash);
+  }
+
+  strong { color: var(--light-ash); font-weight: 600; }
+  em { font-style: italic; color: var(--gold); }
+
+  ul, ol { margin: 16px 0 16px 32px; }
+  li { margin: 8px 0; }
+
+  a { color: var(--ember); text-decoration: none; border-bottom: 1px solid var(--ember); }
+  a:hover { opacity: 0.8; }
+
+  .teaching-box {
+    background: rgba(200,68,26,0.06);
+    border-left: 3px solid var(--ember);
+    padding: 20px;
+    margin: 28px 0;
+    color: var(--light-ash);
+  }
+
+  .teaching-box em { font-style: italic; }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 0.95em;
+  }
+
+  .comparison-table th {
+    background: rgba(200,68,26,0.1);
+    color: var(--light-ash);
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(200,68,26,0.3);
+  }
+
+  .comparison-table td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(200,68,26,0.15);
+  }
+
+  .comparison-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .practice-section {
+    background: rgba(200,68,26,0.04);
+    border: 1px solid rgba(200,68,26,0.15);
+    padding: 28px;
+    margin: 32px 0;
+    border-radius: 4px;
+  }
+
+  .practice-section.practice-1 { border-left: 4px solid var(--ember); }
+  .practice-section.practice-2 { border-left: 4px solid var(--gold); }
+  .practice-section.practice-3 { border-left: 4px solid var(--warm-mid); }
+
+  .practice-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8em;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 8px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 40px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85em;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--warm-mid);
+    text-decoration: none;
+    border: none;
+  }
+
+  .back-link:hover { color: var(--ember); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-nav">
+    <a href="index.html" style="color: var(--warm-mid); text-decoration: none;">Dragon Academy</a>
+    <span>→</span>
+    <span>Session 10</span>
+  </div>
+
+  <div class="hero-session">Session 10</div>
+  
+  <h1>Relational Charge, <em>Flooding, Impact & Feedback</em></h1>
+  
+  <div class="hero-byline">
+    How do we transform unmetabolized activation into genuine contact? What happens when we can name the impact we have on others? The practice of staying present with what's real between us.
+  </div>
+
+  <div class="hero-date">Winter 2026</div>
+</div>
+
+<!-- BODY -->
+<div class="body">
+
+<a href="index.html" class="back-link">← Back to Session Arc</a>
+
+<h2>Today's Orientation</h2>
+
+<p>At the simplest level, we're here because we want intimacy. With ourselves. With other people. And with life.</p>
+
+<p>In the last two sessions, we explored vulnerability as a pathway into intimacy. And what we started to notice is that vulnerability isn't always clean. It has failure modes.</p>
+
+<p>One of the big ones I've been seeing, both in this space and in my own life, is something we call <strong>flooding</strong>. Flooding is when your nervous system is trying to find safety by filling the space. More words. More intensity. More emotion. It looks like vulnerability. But it can actually overwhelm connection instead of deepening it.</p>
+
+<p>So today, we're widening the lens. Because vulnerability alone isn't enough to create intimacy.</p>
+
+<p>We also need to understand:</p>
+<ul>
+  <li><strong>Feedback</strong> — how we let impact be known</li>
+  <li><strong>Repair</strong> — how we come back into connection</li>
+  <li><strong>Violation</strong> — what happens when something exceeds our capacity to consent to, stop, or metabolize</li>
+</ul>
+
+<p>And I want to name that word "violation" can land as intense. So we're going to go slowly. We're going to start with impact, feedback, and repair, and build the capacity to feel and track what's actually happening between us.</p>
+
+<p>Because there's a blind spot here that quietly disrupts intimacy: <em>Sometimes when we feel overwhelmed or hurt, we don't just disconnect. We actually begin to create impact on others that we can't feel yet.</em></p>
+
+<p>And if we don't learn how to see that, track that, and repair that — intimacy has a ceiling.</p>
+
+<p>So today, we're going to start building the awareness and capacity to work with what we call <strong>relational charge</strong>. Not to get it perfect. But to stay connected while something real is happening.</p>
+
+<hr style="border: none; border-top: 1px solid rgba(200,68,26,0.2); margin: 48px 0;">
+
+<h2>What <em>Relational Charge</em> Actually Is</h2>
+
+<p><strong>Relational charge is activation that arises in connection.</strong> Attraction. Irritation. Fear. Desire. Projection. It shows up when you're actually in contact with another nervous system — not in theory, but in the room with them.</p>
+
+<p>Charge is not a problem. It is <em>information.</em> It tells you something real is happening between you and another person. The question is never "why am I activated?" The question is: <strong>what do I do with this before I open my mouth?</strong></p>
+
+<p>The answer is: you <em>metabolize it.</em> You slow down, get curious, return to your own experience. You find what's actually true in you before you speak it into the field. That gap — between the charge landing and you speaking from it — is where the practice lives.</p>
+
+<div class="teaching-box">
+  <strong>Unmetabolized charge released into a shared space is flooding.</strong><br><br>
+  It doesn't matter how true the content is. If it hasn't been processed through your own body first, it overrides the field. It takes up more space than the situation can hold. And it usually lands on someone else as their problem to manage.<br><br>
+  <em>"Charge isn't the problem. Unmetabolized charge is. The practice is the gap between feeling it and speaking it — that gap is where you either stay in contact or lose the room."</em>
+</div>
+
+<h2>What <em>Flooding</em> Actually Looks Like</h2>
+
+<p>People often don't know they're flooding. It feels like honesty. It feels like finally saying the thing. It arrives with urgency and a sense of rightness.</p>
+
+<h3>Signs you're flooding rather than being vulnerable:</h3>
+<ul>
+  <li>You can't slow down</li>
+  <li>You're speaking about the other person more than your own experience</li>
+  <li>There's a quality of needing to be heard at all costs</li>
+  <li>The words are coming faster than you can track them</li>
+  <li>You feel relief when you finish, not contact</li>
+</ul>
+
+<p>Flooding is often a protective response — especially when the nervous system feels threatened or unheard. That matters. But it still has impact on the field. The group can't stay with you inside flooding. They either shut down or get swept into it.</p>
+
+<p><strong>Vulnerability is different. Vulnerability has contact.</strong> You're still present with the other person while you speak. You're pacing to what the field can receive. The words come from something real, but they're not trying to empty you — they're trying to make contact.</p>
+
+<table class="comparison-table">
+  <tr>
+    <th>Vulnerability</th>
+    <th>Flooding / Discharge</th>
+  </tr>
+  <tr>
+    <td>Speaking from present-moment experience</td>
+    <td>Unmetabolized charge moving through the field</td>
+  </tr>
+  <tr>
+    <td>Still in contact with the other person</td>
+    <td>Loses track of the other person</td>
+  </tr>
+  <tr>
+    <td>Paced to what the field can hold</td>
+    <td>Overrides the field's capacity</td>
+  </tr>
+  <tr>
+    <td>Seeking contact, not relief</td>
+    <td>Seeking relief, not contact</td>
+  </tr>
+  <tr>
+    <td>Remains curious about the other</td>
+    <td>Centered on the story, not the sensation</td>
+  </tr>
+  <tr>
+    <td>Can slow down or stop</td>
+    <td>Hard to slow or interrupt</td>
+  </tr>
+</table>
+
+<div class="teaching-box">
+  <strong>Teaching Note</strong><br><br>
+  <em>Don't turn this into a moral framework. Flooding isn't bad. It's a nervous system response, often a protective one. The point isn't "don't flood" — it's "know the difference between flooding and vulnerability so you have a choice." Hold that distinction carefully or it becomes a shame lever.</em>
+</div>
+
+<hr style="border: none; border-top: 1px solid rgba(200,68,26,0.2); margin: 48px 0;">
+
+<h2>Impact <em>& Feedback</em></h2>
+
+<h3>What Impact Is</h3>
+
+<p><strong>Impact is simply: what happened in me as a result of that moment.</strong></p>
+<ul>
+  <li>A body sensation</li>
+  <li>An emotion</li>
+  <li>A shift in my nervous system</li>
+</ul>
+
+<p><em>Not</em> what you meant. <em>Not</em> what I think about you. Just what happened in me.</p>
+
+<p>If we don't have a way to name impact, relational charge doesn't go anywhere. It builds. It distorts. It turns into stories. Or it leaks out sideways — as withdrawal, judgment, or subtle disconnection.</p>
+
+<p>Most people think they're staying in connection when they're actually just not saying the thing. But <strong>intimacy doesn't deepen through silence. It deepens through shared reality.</strong></p>
+
+<p>Feedback is how we create that. It's how I let you see: <em>this is what it was like to be with you in that moment.</em> Not as accusation. As a way to get back into shared reality.</p>
+
+<p><strong>Without feedback, we're each in our own version of what happened. And we can't reconnect from there.</strong></p>
+
+<h3>What Feedback Actually Is — And What It Isn't</h3>
+
+<p><strong>Feedback requires something specific: a moment you can point to.</strong> A concrete observable behavior. If you can't name the moment, you're not giving feedback — you're sharing a perception, a story, or a reaction. That's legitimate, but it's not the same thing, and conflating them is where things get messy.</p>
+
+<p>Most people give feedback that is actually a judgment dressed as a report. "You were dominating." "That felt off." "There's something about your energy." These feel true. They may even be accurate. But they don't give the other person anything to work with. They land as verdict, not information.</p>
+
+<p><strong>Clean feedback is almost always delivered through vulnerability.</strong> It requires you to own your own experience rather than make a claim about the other person's behavior. The format is:</p>
+
+<div class="teaching-box">
+  <strong>When you did/said [<em>specific thing</em>], the impact on me was [<em>body sensation, emotion, response</em>].</strong><br><br>
+  That's it. No story. No explanation. No adding the why.
+</div>
+
+<p>The hardest part is stopping after the impact. Most people want to add "...and that's why what you did was wrong." That addition is the moment feedback becomes a case. Build the case in your own body first. Then check: is there something specific here that the other person can actually hear? If yes, say it. If not, that's yours to metabolize first.</p>
+
+<h3>The Glossary (Hold Lightly)</h3>
+
+<ul>
+  <li><strong>Feedback:</strong> Specific, observable impact offered in service of shared understanding. Points to a concrete moment.</li>
+  <li><strong>Perception:</strong> Your interpretation of what's happening, filtered through your own lens. Not wrong — but not the same as observable fact.</li>
+  <li><strong>Story:</strong> The meaning you build around events. The narrative about why it happened or what it means about the person.</li>
+  <li><strong>Reaction:</strong> Your immediate physiological or emotional response. The raw material before reflection. Important to feel — not always ready to be spoken.</li>
+  <li><strong>Judgment:</strong> An evaluative conclusion (good/bad, right/wrong) delivered as if it's truth. Usually closes conversation rather than opening it.</li>
+  <li><strong>Projection:</strong> Attributing your own internal experience, assumption, or pattern onto another person. Often feels the most real and most certain.</li>
+</ul>
+
+<table class="comparison-table">
+  <tr>
+    <th style="background: rgba(200,68,26,0.1);">Grounded (Real Feedback)</th>
+    <th style="background: rgba(200,68,26,0.05);">Ungrounded (Not Feedback Yet)</th>
+  </tr>
+  <tr>
+    <td>"When you said ___, I noticed..."</td>
+    <td>"You were dominating"</td>
+  </tr>
+  <tr>
+    <td>"In that moment I felt..."</td>
+    <td>"That felt off"</td>
+  </tr>
+  <tr>
+    <td>"The impact on me was..."</td>
+    <td>"Something about your energy..."</td>
+  </tr>
+  <tr>
+    <td>"When you did ___, something in me..."</td>
+    <td>"You always / you never..."</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td>"I felt like you were trying to..."</td>
+  </tr>
+</table>
+
+<hr style="border: none; border-top: 1px solid rgba(200,68,26,0.2); margin: 48px 0;">
+
+<h2>The Practices</h2>
+
+<div class="practice-section practice-1">
+  <p class="practice-label">Practice 1</p>
+  <h3>Flooding vs. The Gap — Learning to Metabolize</h3>
+  
+  <h4>Round 1: Flooding (2–3 min each)</h4>
+  
+  <p><strong>Partner 1 intentionally floods.</strong> Let it be real enough to feel, but not so intense you leave your body. You can flood through:</p>
+  <ul>
+    <li>Over-explaining</li>
+    <li>Needing to be understood</li>
+    <li>Talking fast / not pausing</li>
+    <li>Making the other person the focus</li>
+    <li>Urgency / intensity</li>
+  </ul>
+
+  <p><strong>Partner 2's job is not to fix, absorb, or coach.</strong> Instead, stay in your own experience and speak from what's happening for you in real time:</p>
+  <ul>
+    <li>"I'm starting to lose you"</li>
+    <li>"I feel a little overwhelmed right now"</li>
+    <li>"I want to stay with you, but I can't track you when it's this fast"</li>
+    <li>"I notice I'm pulling away"</li>
+    <li>"I'm having a hard time staying connected"</li>
+  </ul>
+
+  <p><em>If it continues, Partner 2 sets a boundary from their experience:</em></p>
+  <ul>
+    <li>"I'm going to pause you for a second"</li>
+    <li>"I can't stay with this as it is"</li>
+    <li>"I want to keep going, but I need it slower"</li>
+    <li>"I'm going to need to leave if we can't pause together"</li>
+  </ul>
+
+  <h4>Round 2: The Gap (same partners)</h4>
+  
+  <p><strong>Partner 1 begins again,</strong> could be the same topic, could be different.</p>
+  
+  <p><em>Before speaking, pause.</em> <strong>3–5 seconds minimum.</strong></p>
+  
+  <p>Track:</p>
+  <ul>
+    <li>What am I actually feeling?</li>
+    <li>Where is it in my body?</li>
+    <li>What is true right now (not the whole story)?</li>
+  </ul>
+
+  <p>Then speak one sentence at a time, staying in contact.</p>
+
+  <p><strong>Partner 2 tracks:</strong></p>
+  <ul>
+    <li>Do I still feel them?</li>
+    <li>Or did they leave me?</li>
+  </ul>
+
+  <p>Respond organically. Continue for 3 minutes like this and see where you get.</p>
+
+  <h4>Debrief (quick)</h4>
+  <ul>
+    <li>When did you feel contact vs lose it?</li>
+    <li>What did flooding feel like in your body?</li>
+    <li>What changed when you paused?</li>
+  </ul>
+</div>
+
+<div class="practice-section practice-2">
+  <p class="practice-label">Practice 2</p>
+  <h3>Live Feedback — Impact in Real Time</h3>
+  
+  <p>Stay with your partner. Take a moment silently and scan: <strong>what has actually happened between us in this session?</strong> Something they said, how they showed up, eye contact, pacing, presence, or something from the previous exercise. Find one specific moment. If you can't point to a moment, wait.</p>
+
+  <h4>Partner 1 gives feedback using this structure:</h4>
+  
+  <div class="teaching-box">
+    <strong>"When you [<em>specific moment</em>], the impact on me was [<em>what happened in me</em>]."</strong><br><br>
+    Keep it simple. No story, no explanation, no "why." Let it be a little raw, but stay in contact.
+  </div>
+
+  <h4>Partner 2 just listens.</h4>
+  
+  <p>Track what happens in your body. Notice if you stay open or start to close. You can say "I hear you," "that makes sense," or "I feel that," but don't defend, explain, or correct.</p>
+
+  <h4>After both have shared, open it slightly:</h4>
+  
+  <p>Is there anything you want to say now that you've heard that? Stay slow. One sentence at a time. Keep contact.</p>
+
+  <h4>Debrief:</h4>
+  <ul>
+    <li>What made feedback feel easy or hard?</li>
+    <li>When did it feel like contact vs disconnection?</li>
+    <li>What happened when you didn't add the story?</li>
+  </ul>
+
+  <p><em>Framing line: only give feedback about something that actually happened between you here. If it's not live, it won't teach you as much.</em></p>
+</div>
+
+<hr style="border: none; border-top: 1px solid rgba(200,68,26,0.2); margin: 48px 0;">
+
+<h2>Integration</h2>
+
+<p>Today you practiced the gap — the space between activation and speech. You learned to recognize flooding vs. vulnerability. And you gave and received feedback grounded in observable moments.</p>
+
+<p>What matters now is not getting it perfect. It's building the <em>awareness</em> that you can feel these distinctions. That there's a gap. That activation doesn't have to collapse into discharge.</p>
+
+<p>The three questions to carry forward:</p>
+<ul>
+  <li>What's actually true for me in this moment?</li>
+  <li>What impact am I having?</li>
+  <li>Can I name it without story?</li>
+</ul>
+
+</div>
+
+</body>
+</html>
