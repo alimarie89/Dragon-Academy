@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 9 · Vulnerability, Power & Presence · Dragon Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ember: #c8441a;
+    --gold: #c9993a;
+    --ash: #e8e0d4;
+    --char: #1a1410;
+    --warm-mid: #8c7a6a;
+    --light-ash: #f2ede6;
+    --deep-red: #7a1f0a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--char);
+    color: var(--ash);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 20px;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 80px 60px 64px;
+    background: radial-gradient(ellipse at 30% 70%, #3d1a0a 0%, var(--char) 65%);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(200,68,26,0.2);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23c8441a' fill-opacity='0.03'%3E%3Cpath d='M0 0h40v40H0V0zm40 40h40v40H40V40z'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .hero-nav {
+    position: absolute;
+    top: 32px; left: 60px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-mid);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .hero-nav span { color: rgba(140,122,106,0.4); }
+
+  .hero-session {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ember);
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 7vw, 5.2rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--light-ash);
+    position: relative;
+    margin-bottom: 28px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-byline {
+    font-size: 1.1rem;
+    color: var(--warm-mid);
+    font-style: italic;
+    max-width: 540px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .hero-date {
+    position: absolute;
+    top: 32px; right: 60px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--warm-mid);
+    text-align: right;
+  }
+
+  /* ── BODY ── */
+  .body {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 48px 120px;
+  }
+
+  /* ── COLLAPSIBLE ── */
+  .block { margin-bottom: 8px; }
+
+  .block-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    border-top: 1px solid rgba(200,68,26,0.15);
+    padding: 20px 0 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    transition: border-color 0.2s;
+    gap: 16px;
+  }
+
+  .block-toggle:hover { border-color: rgba(200,68,26,0.4); }
+  .block-toggle.open { border-color: var(--ember); }
+
+  .toggle-inner { display: flex; align-items: center; gap: 18px; }
+
+  .block-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ember);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .block-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 300;
+    color: var(--light-ash);
+    line-height: 1.2;
+  }
+
+  .block-title em { font-style: italic; color: var(--gold); }
+
+  .toggle-plus {
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    color: var(--ember);
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    line-height: 1;
+  }
+
+  .block-toggle.open .toggle-plus { transform: rotate(45deg); }
+
+  .block-body {
+    display: none;
+    padding: 24px 0 44px;
+    animation: slideIn 0.22s ease;
+  }
+
+  .block-body.open { display: block; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h2 {
+    font-size: 1.9rem;
+    font-weight: 300;
+    color: var(--light-ash);
+    margin-bottom: 22px;
+    line-height: 1.2;
+  }
+  h2 em { font-style: italic; color: var(--gold); }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ash);
+    margin: 32px 0 12px;
+    letter-spacing: 0.01em;
+  }
+
+  h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 24px 0 10px;
+  }
+
+  p { margin-bottom: 18px; color: var(--ash); font-size: 1.1rem; }
+
+  p.intro {
+    font-size: 1.35rem;
+    font-style: italic;
+    color: var(--light-ash);
+    line-height: 1.65;
+    margin-bottom: 28px;
+  }
+
+  ul, ol { padding-left: 22px; margin-bottom: 18px; }
+  ul li, ol li {
+    margin-bottom: 10px;
+    color: var(--ash);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  strong { color: var(--light-ash); font-weight: 600; }
+
+  /* ── VERSE ── */
+  .verse {
+    border-left: 2px solid var(--ember);
+    padding: 20px 28px;
+    margin: 32px 0;
+    background: rgba(200,68,26,0.04);
+  }
+  .verse p {
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--light-ash);
+    margin-bottom: 4px;
+    line-height: 1.5;
+  }
+  .verse p:last-child { margin-bottom: 0; }
+
+  /* ── PULL QUOTE ── */
+  .pullquote {
+    font-size: 1.6rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.35;
+    color: var(--light-ash);
+    text-align: center;
+    padding: 40px 32px;
+    margin: 40px 0;
+  }
+  .pullquote::before, .pullquote::after {
+    content: '';
+    display: block;
+    width: 36px; height: 1px;
+    background: var(--ember);
+    margin: 0 auto 20px;
+  }
+  .pullquote::after { margin: 20px auto 0; }
+
+  /* ── TWO-COL CARDS ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(200,68,26,0.12);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 28px 0;
+  }
+  .col-card { background: var(--char); padding: 24px; }
+  .col-card h4 { margin-top: 0; }
+  .col-card p { font-size: 1rem; color: var(--warm-mid); margin-bottom: 5px; }
+  .col-card p:last-child { margin-bottom: 0; }
+
+  /* ── TABLE ── */
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 1.12rem;
+    table-layout: auto;
+  }
+  .tbl th {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 12px 20px;
+    text-align: left;
+    border-bottom: 1px solid rgba(201,153,58,0.2);
+  }
+  .tbl td {
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--ash);
+    vertical-align: top;
+  }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl td:first-child {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--ember);
+    white-space: nowrap;
+  }
+
+  /* ── PRACTICE CARD ── */
+  .practice {
+    border: 1px solid rgba(200,68,26,0.2);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 28px 0;
+  }
+  .practice-head {
+    background: rgba(200,68,26,0.08);
+    padding: 18px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .practice-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--light-ash);
+  }
+  .practice-tags { display: flex; gap: 7px; flex-wrap: wrap; }
+  .practice-tags span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border: 1px solid rgba(201,153,58,0.25);
+    color: var(--gold);
+    border-radius: 2px;
+  }
+  .practice-body { padding: 22px; }
+  .practice-body h4 { margin-top: 18px; }
+  .practice-body h4:first-child { margin-top: 0; }
+
+  /* ── QUESTION BLOCK ── */
+  .question {
+    background: rgba(201,153,58,0.05);
+    border-left: 2px solid var(--gold);
+    padding: 16px 22px;
+    margin: 12px 0;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--light-ash);
+  }
+  .question::before {
+    content: 'Practice Question';
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-style: normal;
+    margin-bottom: 8px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%; height: 1px;
+    background: linear-gradient(to right, transparent, rgba(200,68,26,0.2), transparent);
+    margin: 12px 0 4px;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 80px 24px 48px; }
+    .hero-nav, .hero-date { display: none; }
+    .body { padding: 48px 22px 80px; }
+    .two-col { grid-template-columns: 1fr; }
+    .pullquote { font-size: 1.2rem; padding: 28px 16px; }
+    .block-title { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-nav">Dragon Academy <span>›</span> Session Arc <span>›</span> Session 9</div>
+  <div class="hero-date">Winter 2026<br>March 17</div>
+  <div class="hero-session">Session 9 · Pressure &amp; Power</div>
+  <h1>Vulnerability,<br><em>Power</em><br>&amp; Presence</h1>
+  <div class="hero-byline">When voltage arrives, what actually becomes possible? This session completes the arc from last week — and opens the receiver's side of the moment.</div>
+</div>
+
+<!-- BODY -->
+<div class="body">
+
+  <!-- ── THE ONE SENTENCE ── -->
+  <div class="block">
+    <button class="block-toggle" onclick="tog(this)">
+      <div class="toggle-inner">
+        <span class="block-tag">The Program</span>
+        <span class="block-title">What Dragon Academy Is <em>Actually Training</em></span>
+      </div>
+      <span class="toggle-plus">+</span>
+    </button>
+    <div class="block-body">
+      <div class="pullquote">
+        The capacity to stay in contact<br>with reality — including yourself —<br>when something with voltage arrives.
+      </div>
+      <p>Every session trains this from a different angle. The topics change. The training doesn't.</p>
+      <p>Most human suffering in relationship comes from one specific mechanism: <strong>people act from protection while believing they're responding to reality.</strong> The nervous system threat-detects, survival strategies activate — and a person collapses, dominates, withdraws, or floods. And it feels completely justified.</p>
+      <p>Dragon Academy trains the widening of the space between stimulus and response. Not through willpower or insight. Through repetition inside real relational heat, until the nervous system reorganizes and choice becomes genuinely available at the moment it matters most.</p>
+      <div class="verse">
+        <p>The forge doesn't end when the session does.</p>
+        <p>You take the instrument home.</p>
+        <p>What changes is what you can feel,</p>
+        <p>and what you can choose</p>
+        <p>in the moment it matters.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── WHERE WE ARE ── -->
+  <div class="block">
+    <button class="block-toggle" onclick="tog(this)">
+      <div class="toggle-inner">
+        <span class="block-tag">The Arc</span>
+        <span class="block-title">Where Session 9 Lives</span>
+      </div>
+      <span class="toggle-plus">+</span>
+    </button>
+    <div class="block-body">
+      <p>The program builds in three layers. Each layer is a prerequisite for the next.</p>
+      <p style="margin-top: 28px; margin-bottom: 12px;"><strong>Layer 1:</strong> Internal Orientation — Can I locate myself? (Sessions 1–2)</p>
+      <p style="margin-bottom: 12px;"><strong>Layer 2:</strong> Relational Contact — Can I stay present with another nervous system? (Sessions 3–5)</p>
+      <p style="margin-bottom: 28px;"><strong>Layer 3:</strong> Pressure & Power — Can I stay choosing when the voltage is high? (Sessions 6–11 · You are here)</p>
+    </div>
+  </div>
+
+  <!-- ── FOUNDATIONS ── -->
+  <div class="block">
+    <button class="block-toggle" onclick="tog(this)">
+      <div class="toggle-inner">
+        <span class="block-tag">Foundations</span>
+        <span class="block-title">The Teaching: <em>Vulnerability as Power</em></span>
+      </div>
+      <span class="toggle-plus">+</span>
+    </button>
+    <div class="block-body">
+      <p class="intro">The question we're exploring is: What actually is vulnerability? Why does it feel so risky? And why is it one of the most powerful relational tools you have?</p>
+
+      <p>Most people think vulnerability means <strong>emotional openness</strong> — more of it equals more courage. But in Dragon Academy we define it more precisely.</p>
+
+      <div class="pullquote">
+        Vulnerability is being locatable.<br>
+        <span style="font-size:1rem; color:var(--warm-mid)">It's letting someone find you.</span>
+      </div>
+
+      <p>Not the managed version of you. Not the socially correct version. Not the defended version. The <em>real signal.</em></p>
+
+      <p>Because when someone can't find you, they can't actually be in relationship with you. They're relating to a performance. And intimacy cannot happen with someone who isn't actually there.</p>
+
+      <h3>An Important Clarification</h3>
+      <p>Vulnerability here is <strong>not about more exposure.</strong> It's not about oversharing. It's not about revealing your entire life story. It's not about becoming emotionally naked in every room.</p>
+
+      <p>Someone can share their entire childhood and still not be vulnerable. And someone can say one simple sentence like <em>"I notice I'm feeling a little hurt right now,"</em> and that can be deeply vulnerable.</p>
+
+      <p>So the question isn't how much you reveal. The question is:</p>
+
+      <div class="verse">
+        <p>When something real is happening inside you,</p>
+        <p>can you let yourself be found?</p>
+      </div>
+
+      <h3>Why Vulnerability Is Difficult</h3>
+
+      <p>Most people try to be vulnerable when they are <strong>already activated</strong> — angry, hurt, or defensive. And when vulnerability comes out through an activated nervous system, it often stops being vulnerability.</p>
+
+      <p>It becomes <strong>accusation. Blame. Moral judgment.</strong></p>
+
+      <ul>
+        <li>"You shouldn't have done that."</li>
+        <li>"You should have known."</li>
+        <li>"You always do this."</li>
+      </ul>
+
+      <p>The speaker thinks they're being vulnerable. But what the other person experiences is <strong>attack.</strong></p>
+
+      <p>This is why so many people have the story: <em>"Whenever I try to be vulnerable, people shut down."</em> Often the issue isn't vulnerability. It's <strong>charge disguised as vulnerability.</strong></p>
+
+      <h3>The Biological Resistance</h3>
+
+      <p>But there's something even deeper than the behavioral habit. <strong>Every single cell in your body doesn't want to be vulnerable.</strong></p>
+
+      <p>Your nervous system is exquisitely designed to protect you. Being locatable — being findable, seeable, impactable — is perceived as threat. At a cellular level. Not consciously. Not logically. But in the actual physiology of your survival system.</p>
+
+      <p>The more defended you've had to be, the more your body has learned something essential: being found is dangerous. Being seen means you can be hurt. Staying opaque keeps you safe.</p>
+
+      <p>This isn't a story you're telling yourself. This isn't weakness or cowardice. This is your nervous system doing exactly what it learned to do — protecting you from being vulnerable because vulnerability has cost you before.</p>
+
+      <p>So when you move toward vulnerability, you're asking your body to do something that contradicts everything it learned about survival. You're asking it to be findable when being hidden feels like the only safety it knows.</p>
+
+      <p>This is why vulnerability takes actual practice. Not insight. Not understanding. <strong>Nervous system reorganization.</strong> Your cells have to learn, through repetition and safety, that being locatable won't destroy you.</p>
+
+      <h3>The Emotional Intensity</h3>
+
+      <p>And there's one more layer. Vulnerability requires feeling big feelings. The ones you've been managing, avoiding, or controlling for years.</p>
+
+      <p>Loneliness. Grief. Disappointment. Fear. The tender places. The places where you discovered early on that being open meant getting hurt.</p>
+
+      <p>So you learned to not go there. To stay competent, functional, defended. Because the cost of feeling those big feelings — the depth of them, the size of them, the rawness — felt intolerable.</p>
+
+      <p>Now when you move toward vulnerability, you're not just asking your nervous system to stop protecting you. You're asking yourself to <strong>feel the thing you've been avoiding.</strong> To let yourself actually experience the grief, the longing, the loneliness, the fear that lives underneath the charge.</p>
+
+      <p>That's terrifying. Not because you're weak. But because you're finally feeling something real, and that realness is big.</p>
+
+      <p>This is why vulnerability is both the scariest and most powerful thing available to you. It's not just about being seen. It's about <strong>feeling</strong> — fully, without the protection of your defenses, which is a completely different nervous system state.</p>
+
+      <div class="verse">
+        <p>She had blue skin,</p>
+        <p>And so did he.</p>
+        <p>He kept it hid,</p>
+        <p>And so did she.</p>
+        <p>They searched for blue</p>
+        <p>Their whole life through,</p>
+        <p>Then passed right by—</p>
+        <p>And never knew.</p>
+      </div>
+
+      <h3>Underneath Most Anger</h3>
+
+      <p>Underneath most anger there is something softer: hurt, sadness, disappointment, fear.</p>
+
+      <table class="tbl">
+        <tr><th>Anger says</th><th>Vulnerability says</th></tr>
+        <tr><td>"You shouldn't have done that."</td><td>"I feel hurt by that."</td></tr>
+        <tr><td>"You should have known."</td><td>"I was really hoping you would understand how important that was to me."</td></tr>
+      </table>
+
+      <p style="margin-top:20px;">These conversations land very differently in the nervous system. This matters because vulnerability actually <strong>expands power.</strong></p>
+
+      <h3>How Vulnerability Expands Power</h3>
+
+      <p>Remember our working definition: <strong>Power is range × capacity.</strong></p>
+
+      <p>When you're reactive, your range collapses. You might reduce to: attack, withdraw, dominate, or shut down.</p>
+
+      <p>But vulnerability opens the field. Instead of escalation, there is <strong>contact.</strong> Instead of domination or collapse, there is <strong>relationship.</strong></p>
+
+      <p>This is why vulnerability is not weakness. It's a form of <strong>relational power.</strong> Vulnerability creates the conditions where people can actually stay in connection while something real is happening.</p>
+
+      <h3>The Hidden Question</h3>
+
+      <p>Sometimes people say they want to share vulnerability… but what they actually want is punishment, validation, or agreement. And if the hidden goal is retribution, the conversation usually won't work.</p>
+
+      <p>So a useful question before sharing vulnerably is:</p>
+
+      <div class="question">What do I actually want here? Do I want to punish someone? Or do I want to be felt?</div>
+
+      <p style="margin-top:20px;">Because vulnerability's real aim is very simple:</p>
+
+      <div class="verse">
+        <p>To let someone see the impact something had on you.</p>
+        <p>Not as accusation.</p>
+        <p>Not as moral authority.</p>
+        <p>Just as a signal.</p>
+      </div>
+
+      <p style="margin-top:28px;">And when that signal lands cleanly, something powerful becomes possible:</p>
+
+      <div class="pullquote">Contact.</div>
+    </div>
+  </div>
+
+  <!-- ── CORE FRAME ── -->
+  <div class="block">
+    <button class="block-toggle" onclick="tog(this)">
+      <div class="toggle-inner">
+        <span class="block-tag">Core Teaching</span>
+        <span class="block-title">When Signals <em>Get Lost</em></span>
+      </div>
+      <span class="toggle-plus">+</span>
+    </button>
+    <div class="block-body">
+      <p class="intro">There are two main ways vulnerability stays opaque — two nervous system states that prevent contact from happening.</p>
+
+      <div class="two-col">
+        <div class="col-card">
+          <h4>Opacity</h4>
+          <p>Guard up. Nothing gets through.</p>
+          <p>Looks like composure, control, self-sufficiency.</p>
+          <p>Often mistaken for power.</p>
+          <p>You can't be hurt because you can't be reached.</p>
+          <p style="color:var(--light-ash);font-style:italic">Present but not locatable.</p>
+        </div>
+        <div class="col-card">
+          <h4>Flooding</h4>
+          <p>Everything comes out at once.</p>
+          <p>Charge fills the room without a container.</p>
+          <p>Feels like vulnerability from the inside.</p>
+          <p>Feels like overwhelm from the outside.</p>
+          <p style="color:var(--light-ash);font-style:italic">The signal is real. The calibration is off.</p>
+        </div>
+      </div>
+
+      <div class="verse">
+        <p>Neither opacity nor flooding creates contact.</p>
+        <p>The signal gets lost in both directions.</p>
+        <p>One hides it. One drowns it.</p>
+        <p>Neither lets you be found.</p>
+      </div>
+
+      <h3>Charge vs. Signal</h3>
+      <p>Charge is true — the feeling is real. But charge blames, overwhelms, or closes the field. Signal opens it.</p>
+
+      <table class="tbl">
+        <tr><th>What comes out</th><th>What's true underneath</th></tr>
+        <tr><td>Charge</td><td>"You shouldn't have done that."</td></tr>
+        <tr><td>Signal</td><td>"I felt hurt when that happened."</td></tr>
+        <tr><td>Charge</td><td>"You never show up for me."</td></tr>
+        <tr><td>Signal</td><td>"I'm lonely and I miss feeling close to you."</td></tr>
+        <tr><td>Charge</td><td>"This is unacceptable."</td></tr>
+        <tr><td>Signal</td><td>"I'm scared this is going to keep happening."</td></tr>
+      </table>
+
+      <p>The charge is not wrong. The question is: <em>do you want to punish, or do you want to be felt?</em> These require different transmissions.</p>
+
+      <div class="question">Under the charge I'm carrying right now, what's the actual signal?</div>
+    </div>
+  </div>
+
+  <!-- ── NEW TERRITORY ── -->
+  <div class="block">
+    <button class="block-toggle" onclick="tog(this)">
+      <div class="toggle-inner">
+        <span class="block-tag">New This Session</span>
+        <span class="block-title">The <em>Receiver's</em> Side</span>
+      </div>
+      <span class="toggle-plus">+</span>
+    </button>
+    <div class="block-body">
+      <p class="intro">Last session focused on the sender — the person learning to be vulnerable. This session goes to the other side of the moment.</p>
+
+      <p>When vulnerability approaches, the receiver's nervous system often perceives <strong>threat</strong> — not because the signal is wrong, but because contact is powerful. Receiving someone's real vulnerability means:</p>
+      <ul>
+        <li>Impact is possible. You might be moved.</li>
+        <li>Responsibility is on the table. How you respond matters.</li>
+        <li>Your own defenses are being implicitly invited to lower.</li>
+        <li>Something might need to change.</li>
+      </ul>
+
+      <p>The nervous system reads all of this as potential danger. And so it starts scanning. Guarding. Preparing to manage what's coming. This is the warning signal — and it arrives before a word has been spoken.</p>
+
+      <h3>Your Five Options</h3>
+      <p>When vulnerability approaches — when the warning signal starts — most people collapse automatically into one response. Dragon training is expanding that range.</p>
+
+      <table class="tbl">
+        <tr><th>Option</th><th>What it looks like</th><th>When it fits</th></tr>
+        <tr><td>Guard up</td><td>Composure. Distance. Management.</td><td>When you genuinely don't have capacity — named honestly, not silently.</td></tr>
+        <tr><td>Guard down</td><td>Full openness. Letting it land.</td><td>When you're resourced and trust is present.</td></tr>
+        <tr><td>Pause</td><td>"I'm noticing something activating. Can we slow down?"</td><td>When activation is rising and you want to stay — just not at this speed.</td></tr>
+        <tr><td>Create space</td><td>"I want to hear this. Give me 10 minutes."</td><td>When stepping away briefly serves returning with full presence.</td></tr>
+        <tr><td>Stay &amp; regulate</td><td>Remaining present while actively working your own activation.</td><td>When the relationship can hold real-time work.</td></tr>
+      </table>
+
+      <p>Power is the ability to choose among these rather than react automatically. Most people have one default. The training is building the others.</p>
+
+      <h3>About Flooding — Refined</h3>
+      <p><strong>Flooding is charge entering the room without a container.</strong> From the inside it can feel like vulnerability. From the outside it often feels like overwhelm. The signal underneath is always real — the calibration is off.</p>
+
+      <p>The test question: <em>Is what I'm bringing creating contact, or collapsing the field?</em></p>
+
+      <div class="two-col">
+        <div class="col-card">
+          <h4>Contact</h4>
+          <p>Leaves oxygen in the room.</p>
+          <p>The receiver can stay.</p>
+          <p>The person remains locatable.</p>
+          <p>Something moves between you.</p>
+        </div>
+        <div class="col-card">
+          <h4>Flooding</h4>
+          <p>Consumes the available space.</p>
+          <p>The receiver has to manage or escape.</p>
+          <p>The person disappears inside the feeling.</p>
+          <p>The field collapses inward.</p>
+        </div>
+      </div>
+
+      <div class="question">When vulnerability comes toward me, what's my default move? Is it the one I'd choose?</div>
+    </div>
+  </div>
+
+  <!-- ── THE BRIDGE ── -->
+  <div class="block">
+    <button class="block-toggle" onclick="tog(this)">
+      <div class="toggle-inner">
+        <span class="block-tag">The Bridge</span>
+        <span class="block-title">Why Vulnerability <em>Is</em> Power</span>
+      </div>
+      <span class="toggle-plus">+</span>
+    </button>
+    <div class="block-body">
+      <p>Most people think power looks like: confidence without cracks, not needing anyone, composure under pressure, titles and control.</p>
+      <p>But that's often just posturing. It keeps people at a distance. Distance isn't power — it's a safety strategy dressed up as strength.</p>
+      <p>Real power is the ability to <strong>let something land.</strong> To stay present while something real is happening. To feel impact without collapsing. To hold your center without shutting the other person out. To remain locatable without flooding the field.</p>
+
+      <div class="verse">
+        <p>Vulnerability is not the opposite of power.</p>
+        <p>It is what power looks like</p>
+        <p>when it is actually working.</p>
+      </div>
+
+      <div class="verse">
+        <p>Nothing real can be threatened.</p>
+        <p>Nothing unreal exists.</p>
+        <p>Herein lies the peace of God.</p>
+      </div>
+
+      <p style="text-align: center; font-style: italic; color: var(--gold); margin: 36px 0 28px; font-size: 1.1rem; line-height: 1.6;">Nothing real can be threatened.<br>Nothing unreal exists.<br>Herein lies the peace of God.</p>
+
+      <h3>Presence: The Third Element</h3>
+      <p>There is a layer beneath both power and vulnerability that makes both possible. We call it Presence.</p>
+      <p>Without presence, power becomes control and vulnerability becomes flooding. With presence, power becomes grounded choice and vulnerability becomes contact.</p>
+      <p>Presence is the regulating intelligence of the moment. It asks: <em>What is actually needed here right now — more openness, more containment, more clarity, more space?</em> And then moves from that answer rather than from the alarm.</p>
+
+      <div class="pullquote">
+        How much do you trust yourself<br>to stay present<br><em>when something real is happening?</em>
+      </div>
+
+      <div class="question">Where in my life am I currently choosing safety over presence? What would it cost me to close that gap by even 10%?</div>
+    </div>
+  </div>
+
+  <!-- ── INTEGRATION ── -->
+  <div class="block">
+    <button class="block-toggle" onclick="tog(this)">
+      <div class="toggle-inner">
+        <span class="block-tag">Take It Home</span>
+        <span class="block-title">Questions to <em>Live With</em></span>
+      </div>
+      <span class="toggle-plus">+</span>
+    </button>
+    <div class="block-body">
+      <p>These aren't homework. They're invitations to keep the session alive during the week.</p>
+
+      <div class="question">Where am I currently confusing composure with power? What am I actually protecting?</div>
+      <div class="question">Who in my life am I most opaque with? What signal have I been managing instead of sending?</div>
+      <div class="question">The next time I feel the warning signal — when vulnerability approaches me — which of the five options do I want to practice that I haven't been able to access?</div>
+      <div class="question">Is what I'm bringing into my closest relationships creating contact, or collapsing the field?</div>
+
+      <div class="verse" style="margin-top:40px">
+        <p>Power is not the ability to avoid vulnerability.</p>
+        <p>Power is the ability to remain present</p>
+        <p>when vulnerability arrives.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--warm-mid);text-align:center;padding:24px 0;">Dragon Academy Winter 2026 · The forge doesn't end when the session does.</p>
+
+</div>
+
+<script>
+function tog(btn) {
+  const body = btn.nextElementSibling;
+  const open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  btn.classList.toggle('open', !open);
+}
+</script>
+</body>
+</html>

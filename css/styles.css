@@ -24,7 +24,7 @@ body {
   background: var(--obsidian);
   color: var(--bone);
   font-family: 'Crimson Pro', Georgia, serif;
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.7;
   min-height: 100vh;
 }
@@ -59,7 +59,7 @@ body::before {
 }
 
 .forge-mark {
-  font-size: 48px;
+  font-size: 50px;
   display: block;
   margin-bottom: 12px;
   filter: drop-shadow(0 0 20px rgba(232,82,10,0.5));
@@ -73,7 +73,7 @@ body::before {
 
 .site-title {
   font-family: 'Cinzel', serif;
-  font-size: clamp(28px, 5vw, 44px);
+  font-size: clamp(30px, 5vw, 46px);
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--white);
@@ -83,7 +83,7 @@ body::before {
 .site-subtitle {
   font-family: 'Crimson Pro', serif;
   font-style: italic;
-  font-size: 20px;
+  font-size: 22px;
   color: var(--stone);
   margin-top: 8px;
   letter-spacing: 0.02em;
@@ -109,7 +109,7 @@ body::before {
   border: none;
   padding: 12px 20px;
   font-family: 'Cinzel', serif;
-  font-size: 14px;
+  font-size: 16px;
   letter-spacing: 0.08em;
   cursor: pointer;
   transition: all 0.3s;
@@ -145,7 +145,7 @@ body::before {
 /* ===== TYPOGRAPHY ===== */
 .section-label {
   font-family: 'Cinzel', serif;
-  font-size: 13px;
+  font-size: 15px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ember);
@@ -163,7 +163,7 @@ body::before {
 
 .mission-headline {
   font-family: 'Cinzel', serif;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
   color: var(--white);
   margin-bottom: 12px;
@@ -171,7 +171,7 @@ body::before {
 }
 
 .mission-body {
-  font-size: 16px;
+  font-size: 18px;
   color: var(--bone);
   line-height: 1.8;
 }
@@ -228,7 +228,7 @@ body::before {
 
 .timeline-session {
   font-family: 'Cinzel', serif;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--stone);
@@ -238,14 +238,14 @@ body::before {
 
 .timeline-title {
   font-family: 'Cinzel', serif;
-  font-size: 20px;
+  font-size: 22px;
   color: var(--white);
   font-weight: 600;
   margin-bottom: 12px;
 }
 
 .timeline-note {
-  font-size: 16px;
+  font-size: 18px;
   color: var(--bone);
   line-height: 1.7;
   margin-bottom: 12px;
@@ -283,7 +283,7 @@ body::before {
 .badge {
   display: inline-block;
   font-family: 'Cinzel', serif;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 3px 8px;
@@ -649,14 +649,14 @@ body::before {
 
 .acc-title {
   font-family: 'Cinzel', serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--white);
   flex: 1;
 }
 
 .acc-tagline {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--stone);
   display: none;
 }
@@ -710,7 +710,7 @@ body::before {
 .practice-name {
   display: block;
   font-family: 'Cinzel', serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--gold-light);
   margin-bottom: 6px;
@@ -737,7 +737,7 @@ body::before {
   background: linear-gradient(135deg, rgba(42,34,24,0.8) 0%, rgba(26,20,16,0.6) 100%);
   border: 1px solid rgba(232,82,10,0.2);
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
   white-space: nowrap;
   transition: all 0.2s;
@@ -757,11 +757,11 @@ body::before {
 
 .flow-node-label {
   color: var(--bone);
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .scroll-hint {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--stone);
   margin-bottom: 12px;
   font-style: italic;
@@ -780,16 +780,16 @@ body::before {
   }
 
   .forge-mark {
-    font-size: 36px;
+    font-size: 38px;
     margin-bottom: 8px;
   }
 
   .site-title {
-    font-size: 28px;
+    font-size: 30px;
   }
 
   .site-subtitle {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .tab-bar {
@@ -799,12 +799,12 @@ body::before {
 
   .tab {
     padding: 10px 14px;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .section-label {
     margin: 24px 0 12px;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .timeline {
@@ -821,11 +821,11 @@ body::before {
   }
 
   .mission-headline {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .mission-body {
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .practice-header {
@@ -833,11 +833,11 @@ body::before {
   }
 
   .practice-header h3 {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .practice-header-desc {
-    font-size: 13px;
+    font-size: 15px;
   }
 
   .practice-details {
@@ -845,11 +845,11 @@ body::before {
   }
 
   .timeline-title {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .timeline-note {
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .timeline-note ul {
@@ -857,7 +857,7 @@ body::before {
   }
 
   .timeline-note li {
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .flow-map {
@@ -871,12 +871,12 @@ body::before {
   }
 
   .filter-group-inline select {
-    font-size: 13px;
+    font-size: 15px;
     padding: 7px 10px;
   }
 
   .filter-reset-btn {
     padding: 7px 12px;
-    font-size: 11px;
+    font-size: 13px;
   }
 }
