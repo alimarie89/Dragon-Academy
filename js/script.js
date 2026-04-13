@@ -6,6 +6,12 @@ function switchTab(id, btn) {
     if (id === 'library') {
       renderLibrary();
     }
+    if (id === 'glossary') {
+      renderGlossary();
+    }
+    if (id === 'sessions') {
+      renderSessions();
+    }
   }
 
   function renderLibrary() {
@@ -294,4 +300,120 @@ function switchTab(id, btn) {
     container.querySelectorAll('.depth-panel').forEach(p => p.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById(panelId).classList.add('active');
+  }
+
+  function expandSession(sessionNumber) {
+    const detail = document.getElementById('session-' + sessionNumber + '-detail');
+    if (!detail) return;
+    detail.style.display = detail.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function renderGlossary() {
+    const container = document.getElementById('glossary-container');
+    if (!container || typeof glossaryTerms === 'undefined') return;
+    container.innerHTML = '';
+    const entries = Object.keys(glossaryTerms).sort((a, b) => a.localeCompare(b));
+
+    entries.forEach(term => {
+      const group = document.createElement('div');
+      group.className = 'accordion-group';
+
+      const header = document.createElement('div');
+      header.className = 'accordion-header';
+      header.onclick = () => group.classList.toggle('open');
+
+      const title = document.createElement('div');
+      title.className = 'acc-title';
+      title.textContent = term;
+
+      const chevron = document.createElement('span');
+      chevron.className = 'acc-chevron';
+      chevron.textContent = '▼';
+
+      header.appendChild(title);
+      header.appendChild(chevron);
+
+      const body = document.createElement('div');
+      body.className = 'accordion-body';
+
+      const panel = document.createElement('div');
+      panel.className = 'depth-panel';
+      panel.innerHTML = `<p style="margin: 0; color: var(--stone); line-height:1.7;">${glossaryTerms[term]}</p>`;
+      body.appendChild(panel);
+
+      group.appendChild(header);
+      group.appendChild(body);
+      container.appendChild(group);
+    });
+  }
+
+  function renderSessions() {
+    const container = document.getElementById('sessions-container');
+    if (!container || typeof sessionsData === 'undefined' || typeof developmentalArc === 'undefined') return;
+    container.innerHTML = '';
+
+    developmentalArc.layers.forEach(layer => {
+      const layerCard = document.createElement('div');
+      layerCard.className = 'session-layer-card';
+
+      const header = document.createElement('div');
+      header.innerHTML = `
+        <h3>${layer.name}</h3>
+        <p>${layer.question} Sessions ${layer.sessions.join('–')}</p>
+      `;
+      layerCard.appendChild(header);
+
+      layer.sessions.forEach(sessionNumber => {
+        const session = sessionsData[sessionNumber];
+        if (!session) return;
+
+        const item = document.createElement('div');
+        item.className = 'session-item';
+        item.onclick = () => expandSession(session.number);
+        item.innerHTML = `
+          <p class="session-title">Session ${session.number}: ${session.title}</p>
+          <p class="session-subtitle">${session.subtitle}</p>
+        `;
+
+        const detail = document.createElement('div');
+        detail.id = 'session-' + session.number + '-detail';
+        detail.className = 'session-detail';
+        detail.style.borderLeft = '3px solid ' + layer.color;
+
+        let html = '';
+        html += `<p><strong>Core question:</strong> ${session.coreQuestion}</p>`;
+        html += `<p>${session.coreConcept}</p>`;
+        if (session.keyInsight) html += `<p><strong>Key insight:</strong> ${session.keyInsight}</p>`;
+        if (session.concepts && session.concepts.length) {
+          html += `<p><strong>Core concepts:</strong></p><ul>${session.concepts.map(c => `<li><strong>${c.title}:</strong> ${c.desc}</li>`).join('')}</ul>`;
+        }
+        if (session.keyRequirements && session.keyRequirements.length) {
+          html += `<p><strong>Requirements:</strong></p><ul>${session.keyRequirements.map(req => `<li>${req}</li>`).join('')}</ul>`;
+        }
+        if (session.keyCapacities && session.keyCapacities.length) {
+          html += `<p><strong>Key capacities:</strong></p><ul>${session.keyCapacities.map(cap => `<li>${cap}</li>`).join('')}</ul>`;
+        }
+        if (session.threatAltitudes && session.threatAltitudes.length) {
+          html += `<p><strong>Threat altitudes:</strong></p><ul>${session.threatAltitudes.map(th => `<li><strong>${th.name}:</strong> ${th.danger ? th.danger + ' — ' : ''}${th.belief || ''}${th.response ? ' (' + th.response + ')' : ''}</li>`).join('')}</ul>`;
+        }
+        if (session.settlingStyles && session.settlingStyles.length) {
+          html += `<p><strong>Settling styles:</strong></p><ul>${session.settlingStyles.map(style => `<li><strong>${style.name}:</strong> ${style.desc} ${style.needs ? '– Needs: ' + style.needs : ''}</li>`).join('')}</ul>`;
+        }
+        if (session.receiverOptions && session.receiverOptions.length) {
+          html += `<p><strong>Receiver options:</strong></p><ul>${session.receiverOptions.map(opt => `<li><strong>${opt.name}:</strong> ${opt.desc} ${opt.when ? '— ' + opt.when : ''}</li>`).join('')}</ul>`;
+        }
+        if (session.categories && session.categories.length) {
+          html += `<p><strong>Revelation categories:</strong></p><ul>${session.categories.map(cat => `<li>${cat}</li>`).join('')}</ul>`;
+        }
+        if (session.practices && session.practices.length && typeof practicesMap !== 'undefined') {
+          html += `<p><strong>Practices:</strong></p><ul>${session.practices.map(practiceId => { const practice = practicesMap[practiceId]; const title = practice ? practice.title : practiceId; return `<li><a href="#" onclick="switchToPractice('${practiceId}')" style="color: var(--ember); text-decoration: none;">${title}</a></li>`; }).join('')}</ul>`;
+        }
+
+        detail.innerHTML = html;
+        layerCard.appendChild(item);
+        layerCard.appendChild(detail);
+      });
+
+      container.appendChild(layerCard);
+    });
   }

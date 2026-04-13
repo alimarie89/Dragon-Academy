@@ -535,6 +535,84 @@ body::before {
   margin-bottom: 12px;
 }
 
+.sessions-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.session-layer-card {
+  border-radius: 8px;
+  padding: 24px;
+  background: rgba(20, 15, 10, 0.06);
+  border: 1px solid rgba(232,82,10,0.15);
+}
+
+.session-layer-card h3 {
+  color: var(--white);
+  margin-top: 0;
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.session-layer-card p {
+  color: var(--stone);
+  margin: 8px 0 16px;
+}
+
+.session-item {
+  cursor: pointer;
+  padding: 16px;
+  background: var(--ash);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+}
+
+.session-item:hover {
+  background: rgba(232,82,10,0.1);
+}
+
+.session-title {
+  color: var(--white);
+  font-weight: 600;
+  margin: 0;
+}
+
+.session-subtitle {
+  color: var(--stone);
+  font-size: 12px;
+  margin: 4px 0 0;
+}
+
+.session-detail {
+  display: none;
+  padding: 16px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.session-detail p,
+.session-detail ul {
+  color: var(--stone);
+  line-height: 1.7;
+  margin: 0 0 12px;
+}
+
+.session-detail ul {
+  padding-left: 20px;
+}
+
+.session-detail li {
+  margin-bottom: 8px;
+}
+
+.session-detail strong {
+  color: var(--white);
+}
+
 /* ===== ACCORDIONS ===== */
 .accordion-group {
   margin-bottom: 24px;

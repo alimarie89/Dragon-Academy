@@ -226,4 +226,329 @@ const practicesDataS3 = [
   }
 ];
 
-const allPractices = [...practicesData, ...practicesDataS2, ...practicesDataS3];
+const practicesDataS4 = [
+  {
+    id: "S4-1",
+    title: "Morality Interplay",
+    session: "4",
+    sessionLabel: "Session 4: Authorship & Shared Spine",
+    format: "dyad",
+    level: "intermediate",
+    duration: "10–15 min",
+    skills: ["authorship", "integrity", "presence", "boundaries"],
+    topics: ["morality", "integrity", "authority", "power"],
+    what: "Transform charged moral statements from objective claims into subjective experience. Practice staying present when someone tries to make you wrong and force them to own their position.",
+    example: "'You think I shouldn't have done that?' — this move makes it clear the statement is their fence, not universal law."
+  },
+  {
+    id: "S4-2",
+    title: "Authorship Power Dyad",
+    session: "4",
+    sessionLabel: "Session 4: Authorship & Shared Spine",
+    format: "dyad",
+    level: "intermediate",
+    duration: "12–18 min",
+    skills: ["authorship", "power", "contact", "authority"],
+    topics: ["author", "authority", "authenticity", "shared-spine"],
+    what: "One person practices claiming their own internal pen while the other applies pressure or disagreement. The goal is to notice when you begin outsourcing your choice, and to recover authorship in real time."
+  }
+];
+
+const practicesDataS5 = [
+  {
+    id: "S5-1",
+    title: "Settling Style Identification",
+    session: "5",
+    sessionLabel: "Session 5: Settling Styles & Completion",
+    format: "solo,dyad",
+    level: "beginner",
+    duration: "8–12 min",
+    skills: ["self-awareness", "regulation", "communication"],
+    topics: ["settling-styles", "completion", "needs"],
+    what: "Identify the way your nervous system needs to return to available. Name whether you are primarily Relational, Somatic, Functional, Intrinsic, or Cognitive in how you settle."
+  },
+  {
+    id: "S5-2",
+    title: "Interplay with Settling Styles",
+    session: "5",
+    sessionLabel: "Session 5: Settling Styles & Completion",
+    format: "dyad",
+    level: "intermediate",
+    duration: "12–18 min",
+    skills: ["contact", "completion", "boundaries", "empathy"],
+    topics: ["settling", "completion", "interplay"],
+    what: "Practice staying with another person after activation while honoring each other's settling styles. Notice when you default to your own need instead of supporting theirs."
+  },
+  {
+    id: "S5-3",
+    title: "Requesting a Different Settling Style",
+    session: "5",
+    sessionLabel: "Session 5: Settling Styles & Completion",
+    format: "small-group",
+    level: "intermediate",
+    duration: "10–15 min",
+    skills: ["communication", "requesting", "boundary-setting"],
+    topics: ["settling", "request", "needs"],
+    what: "Ask your partner for the settling style you need in that moment, even if it's not what they default to. Practice receiving the request without making it about your own comfort."
+  }
+];
+
+const practicesDataS6 = [
+  {
+    id: "S6-1",
+    title: "Getting Out of the Hole",
+    session: "6",
+    sessionLabel: "Session 6: Threat",
+    format: "dyad",
+    level: "intermediate",
+    duration: "6–10 min",
+    skills: ["self-awareness", "external-attention", "regulation"],
+    topics: ["the-hole", "freeze", "threat", "attention"],
+    what: "Name observable external shifts when someone collapses inward under perceived threat. The practice is restoring outward attention by anchoring to something real."
+  },
+  {
+    id: "S6-2",
+    title: "Get Under It (Threat Reverse Interplay)",
+    session: "6",
+    sessionLabel: "Session 6: Threat",
+    format: "dyad",
+    level: "intermediate",
+    duration: "8–12 min",
+    skills: ["depth", "ownership", "truth-telling"],
+    topics: ["threat", "protection", "pattern", "alarm"],
+    what: "Move beneath behavior to the perceived danger driving protection. Name the hidden fear or threat without story. 'I feel scared you'll leave' or 'I feel scared I'll be judged.'"
+  },
+  {
+    id: "S6-3",
+    title: "Attentional Warm-Up (Me/You Anchoring)",
+    session: "6",
+    sessionLabel: "Session 6: Threat",
+    format: "dyad",
+    level: "beginner",
+    duration: "5–8 min",
+    skills: ["attunement", "focus", "self-location"],
+    topics: ["attention", "me-you", "safety"],
+    what: "Practice moving attention between yourself and another person using simple anchors. This builds the muscle of not collapsing into one orientation when the field becomes charged."
+  }
+];
+
+const practicesDataS7 = [
+  {
+    id: "S7-1",
+    title: "Range Collapse (Full Group)",
+    session: "7",
+    sessionLabel: "Session 7: Power",
+    format: "group",
+    level: "intermediate",
+    duration: "10–15 min",
+    skills: ["power", "choice", "presence"],
+    topics: ["range", "capacity", "reactivity"],
+    what: "In a charged group scenario, practice first embodying your default response, then moving to the opposite extreme, and finally choosing consciously. This reveals where your range narrows under pressure."
+  },
+  {
+    id: "S7-2",
+    title: "Power Channel Dyads",
+    session: "7",
+    sessionLabel: "Session 7: Power",
+    format: "dyad",
+    level: "intermediate",
+    duration: "12–18 min",
+    skills: ["personal-power", "relational-power", "awareness"],
+    topics: ["power", "channel", "range", "capacity"],
+    what: "Practice embodying full personal power and then full relational power. Notice how each channel feels and where your nervous system collapses first."
+  },
+  {
+    id: "S7-3",
+    title: "Pressure Test (Hot Seat)",
+    session: "7",
+    sessionLabel: "Session 7: Power",
+    format: "dyad",
+    level: "intermediate",
+    duration: "10–14 min",
+    skills: ["power", "resilience", "presence"],
+    topics: ["pressure", "power", "choice", "boundaries"],
+    what: "One partner holds a genuine position while the other applies real social pressure. The holder practices staying in power without dominating. The facilitator names the exact moment the field shifts."
+  },
+  {
+    id: "S7-4",
+    title: "Yield vs. Collapse (Somatic Dyad)",
+    session: "7",
+    sessionLabel: "Session 7: Power",
+    format: "dyad",
+    level: "intermediate",
+    duration: "8–12 min",
+    skills: ["somatic-awareness", "power", "presence"],
+    topics: ["yield", "collapse", "surrender", "power"],
+    what: "One partner extends an open hand, the other rests theirs on top. Practice resisting, yielding, and collapsing. Notice the distinct internal sensations of each."
+  }
+];
+
+const practicesDataS8 = [
+  {
+    id: "S8-1",
+    title: "From Charge to Signal",
+    session: "8",
+    sessionLabel: "Session 8: Vulnerability as Power",
+    format: "solo,dyad",
+    level: "intermediate",
+    duration: "12–18 min",
+    skills: ["vulnerability", "signal", "regulation", "self-awareness"],
+    topics: ["vulnerability", "charge", "signal", "contact"],
+    what: "Journal a charged situation, identify whether your current strategy is opacity or flooding, and then translate the underlying truth into a calibrated signal. Ask: do I want to punish or be felt?"
+  }
+];
+
+const practicesDataS9 = [
+  {
+    id: "S9-1",
+    title: "The Transmission Game",
+    session: "9",
+    sessionLabel: "Session 9: Vulnerability, Power & Presence",
+    format: "group",
+    level: "intermediate",
+    duration: "10–15 min",
+    skills: ["signal", "presence", "receiving"],
+    topics: ["vulnerability", "presence", "charge"],
+    what: "In the full group, transmit an emotion at full volume, then transmit the same state as a precise contained signal. Then dyads practice sending and reflecting on what landed."
+  },
+  {
+    id: "S9-2",
+    title: "From Charge to Signal (Dyad)",
+    session: "9",
+    sessionLabel: "Session 9: Vulnerability, Power & Presence",
+    format: "dyad",
+    level: "intermediate",
+    duration: "12–18 min",
+    skills: ["vulnerability", "signal", "reflection", "presence"],
+    topics: ["vulnerability", "charge", "presence"],
+    what: "Solo journaling followed by dyad practice. Sender delivers one signal sentence. Receiver reflects back what they heard, then names one moment they felt charge arrive and one moment the signal landed."
+  },
+  {
+    id: "S9-3",
+    title: "The Warning Signal (Groups of 3)",
+    session: "9",
+    sessionLabel: "Session 9: Vulnerability, Power & Presence",
+    format: "triad",
+    level: "intermediate",
+    duration: "12–16 min",
+    skills: ["presence", "tracking", "witnessing"],
+    topics: ["vulnerability", "presence", "receiver"],
+    what: "Person A approaches with vulnerability. Person B names body activation before responding. Person C witnesses without speaking, tracking when contact was felt vs lost."
+  },
+  {
+    id: "S9-4",
+    title: "One Signal This Week (Dragon Nests)",
+    session: "9",
+    sessionLabel: "Session 9: Vulnerability, Power & Presence",
+    format: "small-group",
+    level: "beginner",
+    duration: "ongoing",
+    skills: ["vulnerability", "courage", "practice"],
+    topics: ["vulnerability", "nest", "integration"],
+    what: "Commit to delivering one calibrated signal in your small peer group before the next meeting. The work is in doing it outside the container."
+  }
+];
+
+const practicesDataS10 = [
+  {
+    id: "S10-1",
+    title: "Flooding Practice",
+    session: "10",
+    sessionLabel: "Session 10: Relational Charge, Feedback & Repair",
+    format: "dyad",
+    level: "intermediate",
+    duration: "10–15 min",
+    skills: ["charge-awareness", "boundary", "self-location", "feedback"],
+    topics: ["charge", "flooding", "feedback"],
+    what: "Partner A intentionally floods while Partner B stays in their own experience and names what is happening for them. Then switch roles. The goal is learning what floods feel like from both sides."
+  },
+  {
+    id: "S10-2",
+    title: "The Gap Practice",
+    session: "10",
+    sessionLabel: "Session 10: Relational Charge, Feedback & Repair",
+    format: "dyad",
+    level: "intermediate",
+    duration: "10–15 min",
+    skills: ["regulation", "metabolizing", "feedback"],
+    topics: ["charge", "pause", "repair"],
+    what: "Practice pausing after charge lands and naming one sentence at a time. The gap between activation and speech is the place where clarity emerges."
+  },
+  {
+    id: "S10-3",
+    title: "Charged Triads",
+    session: "10",
+    sessionLabel: "Session 10: Relational Charge, Feedback & Repair",
+    format: "triad",
+    level: "intermediate",
+    duration: "12–18 min",
+    skills: ["feedback", "repair", "courage"],
+    topics: ["charge", "impact", "repair"],
+    what: "Sharer brings something real. Responder reacts honestly. Sharer practices finding vulnerability beneath the impulse to defend or collapse. Third person witnesses the field."
+  },
+  {
+    id: "S10-4",
+    title: "Live Feedback Practice",
+    session: "10",
+    sessionLabel: "Session 10: Relational Charge, Feedback & Repair",
+    format: "dyad",
+    level: "intermediate",
+    duration: "10–15 min",
+    skills: ["feedback", "ownership", "clarity"],
+    topics: ["feedback", "impact", "observation"],
+    what: "Bring real feedback you've been holding. Use the format: 'When you said/did ___, what happened in me was ___.' Then stop. The focus is on specific observable behavior and your internal experience."
+  }
+];
+
+const practicesDataS11 = [
+  {
+    id: "S11-1",
+    title: "The Revelation Circle — Full Group",
+    session: "11",
+    sessionLabel: "Session 11: Final Session",
+    format: "group",
+    level: "advanced",
+    duration: "20–30 min",
+    skills: ["revelation", "charge", "presence", "receiving"],
+    topics: ["revelation", "vulnerability", "contact"],
+    what: "A full-group format for sharing something charged with a specific person, in service of more connection. Direct address. Brief pause. Receiver receives without immediate response."
+  },
+  {
+    id: "S11-2",
+    title: "Revelation Breakout Rooms",
+    session: "11",
+    sessionLabel: "Session 11: Final Session",
+    format: "small-group",
+    level: "advanced",
+    duration: "20–30 min",
+    skills: ["vulnerability", "feedback", "repair", "connection"],
+    topics: ["revelation", "charge", "field", "intention"],
+    what: "Smaller groups share revelations with selected people from the room. The emphasis is on real charge, clear intention, and metabolized signal rather than hot discharge."
+  },
+  {
+    id: "S11-3",
+    title: "Return to Full Circle",
+    session: "11",
+    sessionLabel: "Session 11: Final Session",
+    format: "group",
+    level: "advanced",
+    duration: "15–25 min",
+    skills: ["integration", "presence", "holding"],
+    topics: ["revelation", "integration", "completion"],
+    what: "The full group returns to the circle to process what landed, what shifted, and how the field changed. The emphasis is on presence and staying in the body while real feedback is offered."
+  },
+  {
+    id: "S11-4",
+    title: "Appreciations as Completion",
+    session: "11",
+    sessionLabel: "Session 11: Final Session",
+    format: "group",
+    level: "beginner",
+    duration: "8–12 min",
+    skills: ["appreciation", "completion", "connection"],
+    topics: ["completion", "closing", "gratitude"],
+    what: "Closing the circle with appreciations that carry real charge — not generic praise, but specific acknowledgments of how someone impacted you. This is used as a practice of completion."
+  }
+];
+
+const allPractices = [...practicesData, ...practicesDataS2, ...practicesDataS3, ...practicesDataS4, ...practicesDataS5, ...practicesDataS6, ...practicesDataS7, ...practicesDataS8, ...practicesDataS9, ...practicesDataS10, ...practicesDataS11];
